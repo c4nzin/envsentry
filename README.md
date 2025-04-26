@@ -1,7 +1,6 @@
+# EnvSentry
 
-# EnvShield
-
-A powerful environment variable validation library with full TypeScript support. EnvShield helps you validate, transform, and handle environment variables with ease, making your applications more robust and error-resistant.
+A powerful environment variable validation library with full TypeScript support. EnvSentry helps you validate, transform, and handle environment variables with ease, making your applications more robust and error-resistant.
 
 ## Features
 
@@ -20,39 +19,39 @@ To install the package, run:
 ### With npm
 
 ```bash
-npm install envshield
+npm install envsentry
 ```
 
 ### With yarn
 
 ```bash
-yarn add envshield
+yarn add envsentry
 ```
 
 ### With pnpm
 
 ```bash
-pnpm install envshield
+pnpm install envsentry
 ```
 
 ### With bun
 
 ```bash
-bun add envshield
+bun add envsentry
 ```
 
 ## Quick Start
 
 ```typescript
-import { cleanEnv, str, num, bool, url } from 'envshield';
+import { cleanEnv, str, num, bool, url } from "envsentry";
 
 // Define and validate your environment
 const env = cleanEnv({
-  NODE_ENV: str({ choices: ['development', 'production', 'test'] }),
+  NODE_ENV: str({ choices: ["development", "production", "test"] }),
   PORT: num({ default: 3000 }),
   DEBUG: bool({ default: false }),
   API_KEY: str({ required: true }),
-  API_URL: url({ protocols: ['https'] })
+  API_URL: url({ protocols: ["https"] }),
 });
 
 // Use your validated environment variables with full type safety
@@ -62,21 +61,21 @@ console.log(`Environment: ${env.NODE_ENV}`);
 
 ## Available Validators
 
-EnvShield comes with a rich set of validators to match your needs:
+envsentry comes with a rich set of validators to match your needs:
 
-| Validator | Description | Options |
-|-----------|-------------|---------|
-| `str()` | String values | `choices`, `default`, `minLength`, `maxLength`, `pattern`, `required` |
-| `num()` | Numeric values | `choices`, `default`, `min`, `max`, `integer`, `required` |
-| `bool()` | Boolean values | `default`, `required` |
-| `port()` | TCP/UDP port numbers | `default`, `required` |
-| `url()` | URL values | `default`, `protocols`, `required` |
-| `email()` | Email addresses | `default`, `required` |
-| `json()` | JSON strings | `default`, `required`, `schema` |
-| `date()` | Date strings | `default`, `required`, `min`, `max` |
-| `array()` | Array values | `default`, `separator`, `itemValidator`, `itemParser`, `required` |
-| `filePath()` | File paths | `default`, `mustExist`, `canBeDir`, `required` |
-| `host()` | Hostnames | `default`, `required` |
+| Validator    | Description          | Options                                                               |
+| ------------ | -------------------- | --------------------------------------------------------------------- |
+| `str()`      | String values        | `choices`, `default`, `minLength`, `maxLength`, `pattern`, `required` |
+| `num()`      | Numeric values       | `choices`, `default`, `min`, `max`, `integer`, `required`             |
+| `bool()`     | Boolean values       | `default`, `required`                                                 |
+| `port()`     | TCP/UDP port numbers | `default`, `required`                                                 |
+| `url()`      | URL values           | `default`, `protocols`, `required`                                    |
+| `email()`    | Email addresses      | `default`, `required`                                                 |
+| `json()`     | JSON strings         | `default`, `required`, `schema`                                       |
+| `date()`     | Date strings         | `default`, `required`, `min`, `max`                                   |
+| `array()`    | Array values         | `default`, `separator`, `itemValidator`, `itemParser`, `required`     |
+| `filePath()` | File paths           | `default`, `mustExist`, `canBeDir`, `required`                        |
+| `host()`     | Hostnames            | `default`, `required`                                                 |
 
 ## Advanced Usage
 
@@ -88,32 +87,32 @@ interface ValidatorSpec<T> {
    * The type of validator (string, number, boolean, etc.)
    */
   type: string;
-  
+
   /**
    * The validation function that checks the value
    */
   validator: (value: any) => boolean;
-  
+
   /**
    * Optional default value
    */
   default?: T;
-  
+
   /**
    * Optional list of allowed values
    */
   choices?: T[];
-  
+
   /**
    * Function to parse string value to the expected type
    */
   parse?: (value: string) => T;
-  
+
   /**
    * Error message to show when validation fails
    */
   message?: string;
-  
+
   /**
    * Whether the value is required
    */
@@ -123,61 +122,64 @@ interface ValidatorSpec<T> {
 
 ### Comprehensive Validation
 
-EnvShield allows you to define comprehensive validation rules for your environment variables:
+envsentry allows you to define comprehensive validation rules for your environment variables:
 
 ```typescript
-import { cleanEnv, str, num, bool, url, email, port, json } from 'envshield';
+import { cleanEnv, str, num, bool, url, email, port, json } from "envsentry";
 
 const env = cleanEnv({
   // Server configuration
-  NODE_ENV: str({ 
-    choices: ['development', 'production', 'test'],
-    default: 'development'
+  NODE_ENV: str({
+    choices: ["development", "production", "test"],
+    default: "development",
   }),
   PORT: port({ default: 3000 }),
-  
+
   // API Configuration
   API_URL: url({
-    protocols: ['https'],
-    message: 'API URL must be a valid HTTPS URL'
+    protocols: ["https"],
+    message: "API URL must be a valid HTTPS URL",
   }),
-  
+
   // Database configuration
   DB_CONNECTION: str({
     pattern: /^mongodb(\+srv)?:\/\/.+$/,
-    message: 'Must be a valid MongoDB connection string'
+    message: "Must be a valid MongoDB connection string",
   }),
-  
+
   // User-related settings
   ADMIN_EMAIL: email({ required: true }),
   USER_LIMITS: json({
     default: { maxUploads: 5, maxProjects: 10 },
-    schema: (data) => 
-      typeof data === 'object' && 
-      typeof data.maxUploads === 'number' &&
-      typeof data.maxProjects === 'number'
+    schema: (data) =>
+      typeof data === "object" &&
+      typeof data.maxUploads === "number" &&
+      typeof data.maxProjects === "number",
   }),
-  
+
   // Feature flags
-  ENABLE_FEATURE_X: bool({ default: false })
+  ENABLE_FEATURE_X: bool({ default: false }),
 });
 ```
 
 ### Dotenv Configuration
 
-EnvShield integrates with dotenv to load environment variables from a file:
+envsentry integrates with dotenv to load environment variables from a file:
 
 ```typescript
-const env = cleanEnv({
-  NODE_ENV: str({ choices: ['development', 'production', 'test'] }),
-  PORT: num({ default: 3000 }),
-}, {
-  dotenv: {
-    path: '.env.production',
-    override: true,
-    optional: true
+const env = cleanEnv(
+  {
+    NODE_ENV: str({ choices: ["development", "production", "test"] }),
+    PORT: num({ default: 3000 }),
+  },
+  {
+    dotenv: {
+      path: ".env.production",
+      override: true,
+      optional: true,
+    },
   }
-});
+);
 ```
 
 ### Generate Example Environment File
@@ -185,17 +187,17 @@ const env = cleanEnv({
 Create a template `.env` file based on your schema:
 
 ```typescript
-import { generateEnvFile, str, num, bool, url } from 'envshield';
+import { generateEnvFile, str, num, bool, url } from "envsentry";
 
 generateEnvFile(
   {
-    NODE_ENV: str({ choices: ['development', 'production', 'test'] }),
+    NODE_ENV: str({ choices: ["development", "production", "test"] }),
     PORT: num({ default: 3000 }),
     API_KEY: str({ required: true }),
     DEBUG: bool({ default: false }),
     API_URL: url(),
   },
-  '.env.example'
+  ".env.example"
 );
 ```
 
@@ -204,11 +206,11 @@ generateEnvFile(
 Get comprehensive reports about your environment variables:
 
 ```typescript
-import { printEnvStatus, str, num, bool } from 'envshield';
+import { printEnvStatus, str, num, bool } from "envsentry";
 
 // Print a detailed report of environment variables
 printEnvStatus({
-  NODE_ENV: str({ choices: ['development', 'production', 'test'] }),
+  NODE_ENV: str({ choices: ["development", "production", "test"] }),
   PORT: num({ default: 3000 }),
   DEBUG: bool({ default: false }),
 });
@@ -217,13 +219,13 @@ printEnvStatus({
 ## Usage with Express
 
 ```typescript
-import express from 'express';
-import { cleanEnv, str, port, bool } from 'envshield';
+import express from "express";
+import { cleanEnv, str, port, bool } from "envsentry";
 
 // Validate environment
 const env = cleanEnv({
   PORT: port({ default: 3000 }),
-  NODE_ENV: str({ choices: ['development', 'production', 'test'] }),
+  NODE_ENV: str({ choices: ["development", "production", "test"] }),
   ENABLE_CORS: bool({ default: true }),
 });
 
@@ -243,15 +245,15 @@ app.listen(env.PORT, () => {
 
 ### Main Functions
 
-| Function | Description |
-|----------|-------------|
-| `cleanEnv()` | Validates environment variables against a schema |
-| `testEnv()` | Tests if environment variables are valid without throwing |
-| `reportEnv()` | Generates a detailed report about environment variables |
-| `printEnvStatus()` | Prints environment status to the console |
-| `generateEnvFile()` | Creates an example .env file from schema |
-| `loadEnvFile()` | Loads environment variables from a file |
-| `mergeEnv()` | Merges custom environment variables with process.env |
+| Function            | Description                                               |
+| ------------------- | --------------------------------------------------------- |
+| `cleanEnv()`        | Validates environment variables against a schema          |
+| `testEnv()`         | Tests if environment variables are valid without throwing |
+| `reportEnv()`       | Generates a detailed report about environment variables   |
+| `printEnvStatus()`  | Prints environment status to the console                  |
+| `generateEnvFile()` | Creates an example .env file from schema                  |
+| `loadEnvFile()`     | Loads environment variables from a file                   |
+| `mergeEnv()`        | Merges custom environment variables with process.env      |
 
 ### Options
 
@@ -261,22 +263,22 @@ interface EnvValidatorOptions {
    * Dotenv options
    */
   dotenv?: {
-    path?: string;      // Path to .env file
-    silent?: boolean;   // Suppress errors
+    path?: string; // Path to .env file
+    silent?: boolean; // Suppress errors
     override?: boolean; // Override existing env vars
     optional?: boolean; // Don't fail if file not found
   };
-  
+
   /**
    * Only allow variables defined in schema
    */
   strict?: boolean;
-  
+
   /**
    * Show warnings and info
    */
   verbose?: boolean;
-  
+
   /**
    * Throw on validation errors
    */
@@ -310,10 +312,10 @@ DEBUG=false
 
 ## TypeScript Support
 
-EnvShield is built with TypeScript and provides excellent type inference:
+envsentry is built with TypeScript and provides excellent type inference:
 
 ```typescript
-import { cleanEnv, str, num } from 'envshield';
+import { cleanEnv, str, num } from "envsentry";
 
 const env = cleanEnv({
   PORT: num(),
@@ -321,7 +323,7 @@ const env = cleanEnv({
 });
 
 // TypeScript knows the types!
-const port: number = env.PORT;   // ✓
+const port: number = env.PORT; // ✓
 const mode: string = env.NODE_ENV; // ✓
 
 // These would cause compile errors:
@@ -329,12 +331,11 @@ const mode: string = env.NODE_ENV; // ✓
 // const foo = env.FOO;             // ✗ Property 'FOO' does not exist
 ```
 
-
 ## Contribute
 
 We welcome contributions! Feel free to open an issue or submit a pull request.
 
-For more details, visit the [GitHub repository](https://github.com/c4nzin/envshield).
+For more details, visit the [GitHub repository](https://github.com/c4nzin/envsentry).
 
 ## License
 
